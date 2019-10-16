@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.baidu.ocr.sdk.model.GeneralResult;
 import com.baidu.ocr.sdk.model.WordSimple;
 import com.ediantong.helpers.PictureSelectHelper;
 import com.ediantong.utils.FileUtils;
+import com.ediantong.utils.ToastUtil;
 
 import java.io.File;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button btmCamera;
     private Button btmPic;
+    private TextView tv_ocr;
     private PictureSelectHelper helper = new PictureSelectHelper();
 
     @Override
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         btmCamera = findViewById(R.id.btm_camera);
+        tv_ocr = findViewById(R.id.tv_ocr);
         btmPic = findViewById(R.id.btm_pic);
         btmCamera.setOnClickListener(this);
         btmPic.setOnClickListener(this);
@@ -97,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                }
 //                // json格式返回字符串
 //                listener.onResult(result.getJsonRes());
-                Log.i("TAG", "onResult: "+result.getJsonRes());
+                tv_ocr.setText(result.getJsonRes());
             }
             @Override
             public void onError(OCRError error) {
-
+                ToastUtil.showCenterShort(error.getMessage());
             }
         });
 
