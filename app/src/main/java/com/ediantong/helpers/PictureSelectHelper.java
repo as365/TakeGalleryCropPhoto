@@ -19,6 +19,7 @@ import android.view.View;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -60,22 +61,11 @@ public class PictureSelectHelper implements Serializable {
     private int output_X = 480;
     private int output_Y = 480;
 
-    private Activity mContext;
+    private AppCompatActivity mContext;
     private Bitmap resultBitmap;
 
-    /**
-     * 编辑个人资料头像显示选择图片对话框
-     *
-     * @param activity
-     */
-    public void showSelectPicturePopForEditProfile(FragmentActivity activity, int maxSelectNum) {
-        if (activity == null) {
-            return;
-        }
-        this.mContext = activity;
-    }
 
-    public void  init(FragmentActivity activity){
+    public void  init(AppCompatActivity activity){
         this.mContext = activity;
     }
 
@@ -236,7 +226,7 @@ public class PictureSelectHelper implements Serializable {
      * @param height      剪裁图片高度
      * @param requestCode 剪裁图片的请求码
      */
-    public static void cropImageUri(Activity activity, Uri orgUri, Uri desUri, int aspectX, int aspectY, int width, int height, int requestCode) {
+    public static void cropImageUri(AppCompatActivity activity, Uri orgUri, Uri desUri, int aspectX, int aspectY, int width, int height, int requestCode) {
 
         UCrop.of(orgUri, desUri)
                 .withAspectRatio(16, 9)

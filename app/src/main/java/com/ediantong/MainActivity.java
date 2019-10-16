@@ -3,7 +3,6 @@ package com.ediantong;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import com.ediantong.helpers.PictureSelectHelper;
 import com.ediantong.utils.FileUtils;
 import com.ediantong.utils.ToastUtil;
 
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
