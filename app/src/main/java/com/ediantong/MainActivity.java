@@ -92,16 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         OCR.getInstance(this).recognizeGeneralBasic(param, new OnResultListener<GeneralResult>() {
             @Override
             public void onResult(GeneralResult result) {
-                // 调用成功，返回GeneralResult对象
-//                for (WordSimple wordSimple : result.getWordList()) {
-//                    // wordSimple不包含位置信息
-//                    wordSimple word = wordSimple;
-//                    sb.append(word.getWords());
-//                    sb.append("\n");
-//                }
-//                // json格式返回字符串
-//                listener.onResult(result.getJsonRes());
-                tv_ocr.setText(result.getJsonRes());
+                tv_ocr.setText(getUpLoadOcrText(result));
             }
             @Override
             public void onError(OCRError error) {
@@ -109,5 +100,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    /**
+     * 获取ocr识别结果并且封装
+     * @param result
+     * @return
+     */
+    private String getUpLoadOcrText(GeneralResult result){
+        StringBuffer sb = new StringBuffer();
+        for (WordSimple wordSimple : result.getWordList()) {
+            sb.append(wordSimple.getWords());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }
