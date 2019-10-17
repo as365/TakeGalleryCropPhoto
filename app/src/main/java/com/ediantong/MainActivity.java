@@ -3,6 +3,7 @@ package com.ediantong;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -109,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StringBuffer sb = new StringBuffer();
         for (WordSimple wordSimple : result.getWordList()) {
             sb.append(wordSimple.getWords());
-            sb.append("\n");
         }
+        Log.i("TAG", "getUpLoadOcrText: "+sb.toString());
         return sb.toString();
     }
 }
