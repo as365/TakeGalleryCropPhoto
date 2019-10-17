@@ -12,30 +12,19 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.FileUtils;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.view.View;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentActivity;
 
-import com.ediantong.R;
 import com.ediantong.utils.ToastUtil;
-import com.yalantis.ucrop.UCrop;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.Serializable;
-
 
 import static android.app.Activity.RESULT_OK;
 
@@ -48,13 +37,13 @@ import static android.app.Activity.RESULT_OK;
  */
 public class PictureSelectHelper implements Serializable {
 
-    private  final int CODE_GALLERY_REQUEST = 0xa0;
-    private  final int CODE_CAMERA_REQUEST = 0xa1;
-    private  final int CODE_RESULT_REQUEST = 0xa2;
-    private  final int CAMERA_PERMISSIONS_REQUEST_CODE = 0x03;
-    private  final int STORAGE_PERMISSIONS_REQUEST_CODE = 0x04;
-    public  final File FILE_URI = new File(Environment.getExternalStorageDirectory().getPath() + "/photo.jpg");
-    public  final File FILE_CROP_URI = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");
+    private final int CODE_GALLERY_REQUEST = 0xa0;
+    private final int CODE_CAMERA_REQUEST = 0xa1;
+    private final int CODE_RESULT_REQUEST = 0xa2;
+    private final int CAMERA_PERMISSIONS_REQUEST_CODE = 0x03;
+    private final int STORAGE_PERMISSIONS_REQUEST_CODE = 0x04;
+    public final File FILE_URI = new File(Environment.getExternalStorageDirectory().getPath() + "/photo.jpg");
+    public final File FILE_CROP_URI = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");
     private final String AUTHROITY = "com.ediantong.provider";
     private Uri imageUri;
     private Uri cropImageUri;
@@ -65,7 +54,7 @@ public class PictureSelectHelper implements Serializable {
     private Bitmap resultBitmap;
 
 
-    public void  init(AppCompatActivity activity){
+    public void init(AppCompatActivity activity) {
         this.mContext = activity;
     }
 
@@ -144,7 +133,7 @@ public class PictureSelectHelper implements Serializable {
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data,OnBitmapListener onBitmapListener) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data, OnBitmapListener onBitmapListener) {
         if (resultCode != RESULT_OK) {
             return;
         }
@@ -164,9 +153,9 @@ public class PictureSelectHelper implements Serializable {
                     ToastUtil.showCenterShort("设备没有SD卡！");
                 }
                 break;
-            case UCrop.REQUEST_CROP:
+            case CODE_RESULT_REQUEST:
                 Bitmap bitmap = getBitmapFromUri(cropImageUri, mContext);
-                if (bitmap != null && onBitmapListener!=null) {
+                if (bitmap != null && onBitmapListener != null) {
                     resultBitmap = bitmap;
                     onBitmapListener.successBitmap(resultBitmap);
                 }
@@ -175,11 +164,11 @@ public class PictureSelectHelper implements Serializable {
     }
 
 
-    public Bitmap getResultBitmap(){
+    public Bitmap getResultBitmap() {
         return resultBitmap;
     }
 
-    public interface OnBitmapListener{
+    public interface OnBitmapListener {
         void successBitmap(Bitmap bitmap);
     }
 
@@ -228,28 +217,29 @@ public class PictureSelectHelper implements Serializable {
      */
     public static void cropImageUri(AppCompatActivity activity, Uri orgUri, Uri desUri, int aspectX, int aspectY, int width, int height, int requestCode) {
 
-        UCrop.of(orgUri, desUri)
-                .withAspectRatio(16, 9)
-                .withMaxResultSize(width, height)
-                .start(activity);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        intent.setDataAndType(orgUri, "image/*");
+        intent.putExtra("crop", "true");
+        if (width * height > 0) {
+            //矩形裁剪
+            intent.putExtra("outputX", width);
+            intent.putExtra("outputY", height);
+        } else {
+            //圆形裁剪
+            intent.putExtra("aspectX", aspectX);
+            intent.putExtra("aspectY", aspectY);
+        }
 
-//        Intent intent = new Intent("com.android.camera.action.CROP");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        }
-//        intent.setDataAndType(orgUri, "image/*");
-//        intent.putExtra("crop", "true");
-//        intent.putExtra("aspectX", aspectX);
-//        intent.putExtra("aspectY", aspectY);
-//        intent.putExtra("outputX", width);
-//        intent.putExtra("outputY", height);
-//        intent.putExtra("scale", true);
-//        //将剪切的图片保存到目标Uri中
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, desUri);
-//        intent.putExtra("return-data", true);
-//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-//        intent.putExtra("noFaceDetection", true);
-//        activity.startActivityForResult(intent, requestCode);
+        intent.putExtra("scale", true);
+        //将剪切的图片保存到目标Uri中
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, desUri);
+        intent.putExtra("return-data", true);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
