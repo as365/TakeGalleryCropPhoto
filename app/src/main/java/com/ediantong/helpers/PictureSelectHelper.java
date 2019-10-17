@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,8 +49,8 @@ public class PictureSelectHelper implements Serializable {
     private final String AUTHROITY = "com.ediantong.provider";
     private Uri imageUri;
     private Uri cropImageUri;
-    private int output_X = 480;
-    private int output_Y = 480;
+    private int output_X = 800;
+    private int output_Y = 800;
 
     private AppCompatActivity mContext;
     private Bitmap resultBitmap;
@@ -236,7 +238,9 @@ public class PictureSelectHelper implements Serializable {
         intent.putExtra("scale", true);
         //将剪切的图片保存到目标Uri中
         intent.putExtra(MediaStore.EXTRA_OUTPUT, desUri);
-        intent.putExtra("return-data", true);
+        //如果return-data  返回true的话  容易产生android.os.TransactionTooLargeException异常
+        //这里不要其返回数据而是让开发者从uri去取文件
+        intent.putExtra("return-data", isReturnData());
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true);
         activity.startActivityForResult(intent, requestCode);
@@ -371,6 +375,23 @@ public class PictureSelectHelper implements Serializable {
      */
     private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+
+    /**
+     * 是否裁剪之后返回数据
+     **/
+    private static boolean isReturnData() {
+        String release = Build.VERSION.RELEASE;
+        int sdk = Build.VERSION.SDK_INT;
+        Log.i(TAG, "release:" + release + "sdk:" + sdk);
+        String manufacturer = android.os.Build.MANUFACTURER;
+        if (!TextUtils.isEmpty(manufacturer)) {
+            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
+                return true;
+            }
+        }
+        return false;
     }
 
 }
