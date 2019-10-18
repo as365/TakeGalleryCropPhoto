@@ -1,4 +1,4 @@
-package com.ediantong;
+package com.ediantong.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +18,7 @@ import com.baidu.ocr.sdk.exception.OCRError;
 import com.baidu.ocr.sdk.model.GeneralBasicParams;
 import com.baidu.ocr.sdk.model.GeneralResult;
 import com.baidu.ocr.sdk.model.WordSimple;
+import com.ediantong.R;
 import com.ediantong.helpers.PictureSelectHelper;
 import com.ediantong.utils.FileUtils;
 import com.ediantong.utils.ToastUtil;
