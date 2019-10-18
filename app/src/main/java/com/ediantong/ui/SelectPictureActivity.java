@@ -1,23 +1,37 @@
 package com.ediantong.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ediantong.R;
+import com.ediantong.adapter.ImagePickAdapter;
 import com.ediantong.bean.ImageBean;
 import com.ediantong.library.AlbumImageUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SelectPictureActivity extends AppCompatActivity {
 
     private Thread mWorkThread;
+    private List<String> mList = new ArrayList<>();
+    private RecyclerView recycler_view;
+    private int mCowCount = 4;
+    private ImagePickAdapter adapter = new ImagePickAdapter(R.layout.item_image_pick,mList,mCowCount);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_picture);
+        initView();
+    }
+
+    private void initView() {
+        recycler_view = findViewById(R.id.recycler_view);
+        recycler_view.setLayoutManager(new GridLayoutManager(this,mCowCount));
+        recycler_view.setAdapter(adapter);
     }
 
     @Override
@@ -43,8 +57,11 @@ public class SelectPictureActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("TAG", "returnImageList: "+imagePathList.size());
-                        Log.i("TAG", "returnImageList: "+Thread.currentThread().getName());
+                        mList.clear();
+                        for (int i = 0; i < imagePathList.size(); i++) {
+                            mList.add(imagePathList.get(i).path);
+                        }
+                        adapter.setNewData(mList);
                     }
                 });
             }
