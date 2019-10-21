@@ -83,6 +83,7 @@ public class SelectPictureActivity extends AppCompatActivity {
         Intent intent = new Intent(this,CropActivity.class);
         intent.putExtra("path", mList.get(position));
         startActivity(intent);
+        setResult(101);
         finish();
     }
 }
