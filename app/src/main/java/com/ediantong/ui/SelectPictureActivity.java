@@ -57,20 +57,15 @@ public class SelectPictureActivity extends AppCompatActivity {
             @Override
             public void returnImageListOnBackThread(final List<ImageBean> imagePathList,Thread workThread) {
                 mWorkThread = workThread;
-                runOnUiThread(new Runnable() {
+                mList.clear();
+                for (int i = 0; i < imagePathList.size(); i++) {
+                    mList.add(imagePathList.get(i).path);
+                }
+                adapter.setNewData(mList);
+                adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                     @Override
-                    public void run() {
-                        mList.clear();
-                        for (int i = 0; i < imagePathList.size(); i++) {
-                            mList.add(imagePathList.get(i).path);
-                        }
-                        adapter.setNewData(mList);
-                        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                                turn2CropActivity(position);
-                            }
-                        });
+                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        turn2CropActivity(position);
                     }
                 });
             }

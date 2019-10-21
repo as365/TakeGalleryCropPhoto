@@ -2,6 +2,9 @@ package com.ediantong.library;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
 
@@ -16,13 +19,33 @@ public class AlbumImageRunnable implements Runnable {
     private Context mContext;
     private AlbumImageUtils.OnAlbumListener mOnListener;
     private List<ImageBean> mImageList = new ArrayList<>();
+    private InnerHandler mHandler = new InnerHandler();
+    private static final int SAVE_SUCCESS = 0;
+
+    private class InnerHandler extends Handler {
+        public InnerHandler() {
+            super(Looper.getMainLooper());
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case SAVE_SUCCESS:
+                    if (mOnListener != null && mImageList.size()>0) {
+                        mOnListener.returnImageListOnBackThread(mImageList,Thread.currentThread());
+                    }
+                    break;
+            }
+        }
+    }
 
     public AlbumImageRunnable(Context mContext, AlbumImageUtils.OnAlbumListener onListener) {
         this.mContext = mContext;
         this.mOnListener = onListener;
     }
 
-    String[] projection = new String[]{MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA,MediaStore.Images.Media._ID};
+    String[] projection = new String[]{MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
 
     @Override
     public void run() {
@@ -55,7 +78,7 @@ public class AlbumImageRunnable implements Runnable {
             } while (cursor.moveToPrevious());
         }
         cursor.close();
-        mOnListener.returnImageListOnBackThread(mImageList,Thread.currentThread());
+        Message.obtain(mHandler, SAVE_SUCCESS, null).sendToTarget();
         Thread.interrupted();
     }
 
@@ -79,7 +102,7 @@ public class AlbumImageRunnable implements Runnable {
 
                 File file = new File(path);
                 if (file.exists() && !imageSet.contains(path)) {
-                    mImageList.add(new ImageBean(id,albumName,path,false));
+                    mImageList.add(new ImageBean(id, albumName, path, false));
                     imageSet.add(path);
                 }
             } while (cursor.moveToPrevious());
