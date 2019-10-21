@@ -136,7 +136,7 @@ public class PictureSelectHelper implements Serializable {
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data, OnBitmapListener onBitmapListener) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
             return;
         }
@@ -157,11 +157,7 @@ public class PictureSelectHelper implements Serializable {
                 }
                 break;
             case CODE_RESULT_REQUEST:
-                Bitmap bitmap = getBitmapFromUri(cropImageUri, mContext);
-                if (bitmap != null && onBitmapListener != null) {
-                    resultBitmap = bitmap;
-                    onBitmapListener.successBitmap(resultBitmap);
-                }
+                resultBitmap = getBitmapFromUri(cropImageUri, mContext);
                 break;
         }
     }
@@ -170,11 +166,6 @@ public class PictureSelectHelper implements Serializable {
     public Bitmap getResultBitmap() {
         return resultBitmap;
     }
-
-    public interface OnBitmapListener {
-        void successBitmap(Bitmap bitmap);
-    }
-
 
     /***********************************下面都是辅助方法****************************************/
 

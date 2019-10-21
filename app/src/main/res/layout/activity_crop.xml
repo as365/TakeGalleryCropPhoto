@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.CropActivity">
-    <ImageView
-        android:id="@+id/imageView"
+    <RelativeLayout
+        android:id="@+id/re_topbar"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="50dp"
+        android:layout_width="match_parent">
+        <TextView
+            android:id="@+id/tv_back"
+            android:text="返回"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/tv_ok"
+            android:text="完成"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <com.ediantong.view.CropImageView
+        android:id="@+id/cropImageView"
+        app:layout_constraintTop_toBottomOf="@+id/re_topbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="200dp"
-        android:layout_height="200dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

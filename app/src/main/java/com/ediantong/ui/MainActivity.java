@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btm_camera:
                 helper.autoObtainCameraPermission();
                 break;
@@ -62,19 +62,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        helper.onActivityResult(requestCode, resultCode, data, new PictureSelectHelper.OnBitmapListener() {
-            @Override
-            public void successBitmap(Bitmap bitmap) {
-                //在这里处理Bitmap
-                upLoadBitmap(bitmap);
-            }
-        });
+        helper.onActivityResult(requestCode, resultCode, data);
+        //只有成功获取到了bitmap才进行上传处理
+        if (helper.getResultBitmap() != null) {
+            upLoadBitmap(helper.getResultBitmap());
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        helper.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        helper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 
@@ -94,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResult(GeneralResult result) {
                 tv_ocr.setText(getUpLoadOcrText(result));
             }
+
             @Override
             public void onError(OCRError error) {
                 ToastUtil.showCenterShort(error.getMessage());
@@ -104,15 +103,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 获取ocr识别结果并且封装
+     *
      * @param result
      * @return
      */
-    private String getUpLoadOcrText(GeneralResult result){
+    private String getUpLoadOcrText(GeneralResult result) {
         StringBuffer sb = new StringBuffer();
         for (WordSimple wordSimple : result.getWordList()) {
             sb.append(wordSimple.getWords());
         }
-        Log.i("TAG", "getUpLoadOcrText: "+sb.toString());
+        Log.i("TAG", "getUpLoadOcrText: " + sb.toString());
         return sb.toString();
     }
 }
