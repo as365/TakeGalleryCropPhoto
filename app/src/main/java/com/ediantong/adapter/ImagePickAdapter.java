@@ -33,11 +33,7 @@ public class ImagePickAdapter extends BaseQuickAdapter<String, ImagePickAdapter.
     protected void convert( ImageViewHolder helper, String path) {
         ImageView imageView = helper.getView(R.id.imageView);
         int width = ScreenUtils.getScreenWidth(mContext) / cowCount;
-        Glide.with(mContext)
-                .load(new File(path))
-                .override(width,width)
-                .centerCrop()
-                .into(imageView);
+        Glide.with(mContext).load(new File(path)).into(imageView);
     }
 
 }

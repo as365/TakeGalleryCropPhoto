@@ -1,11 +1,14 @@
 package com.ediantong.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ediantong.R;
 import com.ediantong.adapter.ImagePickAdapter;
 import com.ediantong.bean.ImageBean;
@@ -62,10 +65,29 @@ public class SelectPictureActivity extends AppCompatActivity {
                             mList.add(imagePathList.get(i).path);
                         }
                         adapter.setNewData(mList);
+                        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                turn2CropActivity(position);
+                            }
+                        });
                     }
                 });
             }
         });
     }
 
+    /**
+     * 跳转到裁剪activity
+     * @param position
+     */
+    private void turn2CropActivity(int position) {
+        if(mList==null||mList.size()==0){
+            return;
+        }
+        Intent intent = new Intent(this,CropActivity.class);
+        intent.putExtra("path", mList.get(position));
+        startActivity(intent);
+        finish();
+    }
 }

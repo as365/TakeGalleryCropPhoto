@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.ediantong.ui.SelectPictureActivity;
 import com.ediantong.utils.ToastUtil;
 
 import java.io.File;
@@ -202,9 +203,12 @@ public class PictureSelectHelper implements Serializable {
      * @param requestCode 打开相册的请求码
      */
     public static void openPic(Activity activity, int requestCode) {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        activity.startActivityForResult(photoPickerIntent, requestCode);
+//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//        photoPickerIntent.setType("image/*");
+//        activity.startActivityForResult(photoPickerIntent, requestCode);
+
+        Intent intent = new Intent(activity, SelectPictureActivity.class);
+        activity.startActivityForResult(intent,requestCode);
     }
 
     /**
