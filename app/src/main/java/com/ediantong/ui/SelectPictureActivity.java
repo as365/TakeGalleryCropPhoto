@@ -1,6 +1,7 @@
 package com.ediantong.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectPictureActivity extends AppCompatActivity {
+
+    private final int CODE_GALLERY_REQUEST = 100;
 
     private Thread mWorkThread;
     private List<String> mList = new ArrayList<>();
@@ -80,10 +83,9 @@ public class SelectPictureActivity extends AppCompatActivity {
         if(mList==null||mList.size()==0){
             return;
         }
-        Intent intent = new Intent(this,CropActivity.class);
-        intent.putExtra("path", mList.get(position));
-        startActivity(intent);
-        setResult(101);
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(mList.get(position)));
+        setResult(CODE_GALLERY_REQUEST,intent);
         finish();
     }
 }

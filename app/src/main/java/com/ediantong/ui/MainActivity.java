@@ -29,14 +29,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btmCamera;
     private Button btmPic;
     private TextView tv_ocr;
-    private PictureSelectHelper helper = new PictureSelectHelper();
+    private PictureSelectHelper helper = new PictureSelectHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        helper.init(this);
     }
 
     private void initView() {
@@ -51,10 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btm_camera:
-                helper.autoObtainCameraPermission();
+                helper.cameraPicture();
                 break;
             case R.id.btm_pic:
-                helper.autoObtainGalleryPermission();
+                helper.galleryPicture();
                 break;
         }
     }
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (helper.getResultBitmap() != null) {
             upLoadBitmap(helper.getResultBitmap());
         }
-        Log.i("TAG", "onActivityResult: "+requestCode);
     }
 
     @Override

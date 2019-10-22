@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.ediantong.R;
+import com.ediantong.bean.CropBean;
 import com.ediantong.utils.ToastUtil;
 import com.ediantong.view.CropImageView;
 
@@ -17,7 +18,7 @@ import java.io.File;
 
 public class CropActivity extends AppCompatActivity implements View.OnClickListener, CropImageView.OnBitmapSaveCompleteListener {
 
-    private String path = "";
+    private CropBean mCropBean;
     private CropImageView cropImageView;
     private TextView tv_cancel, tv_ok;
 
@@ -52,17 +53,19 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initPath(Intent intent) {
         if (intent != null) {
-            path = intent.getStringExtra("path");
+            mCropBean = (CropBean) intent.getParcelableExtra("crop_bean");
         }
     }
 
     private void doLogic() {
-        Glide.with(this).load(new File(path)).into(cropImageView);
+        if (mCropBean != null) {
+            Glide.with(this).load(mCropBean.originUri).into(cropImageView);
+        }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_ok:
                 saveFile();
                 break;
@@ -73,11 +76,15 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveFile() {
-        cropImageView.saveBitmapToFile(new File(this.getCacheDir() + "/ImagePicker/cropTemp/"),800,800,true);
+        if(mCropBean!=null){
+            File file = new File(mCropBean.folder_name);
+            cropImageView.saveBitmapToFile(file, mCropBean.width, mCropBean.height, mCropBean.isSaveRectangle);
+        }
     }
 
     @Override
     public void onBitmapSaveSuccess(File file) {
+        finish();
         ToastUtil.showCenterShort("success");
     }
 
