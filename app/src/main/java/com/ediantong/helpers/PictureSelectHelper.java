@@ -22,10 +22,9 @@ import com.ediantong.utils.FileUtils;
 import com.ediantong.utils.ToastUtil;
 
 import java.io.File;
-import java.io.Serializable;
 
 
-public class PictureSelectHelper implements Serializable {
+public class PictureSelectHelper  {
 
     private final int CODE_GALLERY_REQUEST = 100;
     private final int CODE_CAMERA_REQUEST = 101;
