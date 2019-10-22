@@ -7,13 +7,11 @@ import android.os.Parcelable;
 
 public class CropBean implements Parcelable {
     public Uri originUri;
-    public Uri desUri;
-    public int aspectX;
-    public int aspectY;
     public int width;
     public int height;
     public String folder_name;
     public boolean isSaveRectangle;//是否保存矩形区域内的图片
+
 
     @Override
     public int describeContents() {
@@ -23,12 +21,9 @@ public class CropBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.originUri, flags);
-        dest.writeParcelable(this.desUri, flags);
-        dest.writeInt(this.aspectX);
-        dest.writeString(this.folder_name);
-        dest.writeInt(this.aspectY);
         dest.writeInt(this.width);
         dest.writeInt(this.height);
+        dest.writeString(this.folder_name);
         dest.writeByte(this.isSaveRectangle ? (byte) 1 : (byte) 0);
     }
 
@@ -37,9 +32,6 @@ public class CropBean implements Parcelable {
 
     protected CropBean(Parcel in) {
         this.originUri = in.readParcelable(Uri.class.getClassLoader());
-        this.desUri = in.readParcelable(Uri.class.getClassLoader());
-        this.aspectX = in.readInt();
-        this.aspectY = in.readInt();
         this.width = in.readInt();
         this.height = in.readInt();
         this.folder_name = in.readString();

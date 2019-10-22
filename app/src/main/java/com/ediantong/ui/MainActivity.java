@@ -1,7 +1,6 @@
 package com.ediantong.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +19,9 @@ import com.baidu.ocr.sdk.model.GeneralResult;
 import com.baidu.ocr.sdk.model.WordSimple;
 import com.ediantong.R;
 import com.ediantong.helpers.PictureSelectHelper;
-import com.ediantong.utils.FileUtils;
 import com.ediantong.utils.ToastUtil;
+
+import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
         helper.onActivityResult(requestCode, resultCode, data);
         //只有成功获取到了bitmap才进行上传处理
-        if (helper.getResultBitmap() != null) {
-            upLoadBitmap(helper.getResultBitmap());
+        if (helper.getResultFile() != null) {
+            upLoadBitmap(helper.getResultFile());
         }
     }
 
@@ -77,16 +77,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 申请ocr识别图片
-     * @param bitmap
      */
-    private void upLoadBitmap(Bitmap bitmap) {
+    private void upLoadBitmap(File file) {
+        tv_ocr.setText("");
+
         // 通用文字识别参数设置
         GeneralBasicParams param = new GeneralBasicParams();
         param.setDetectDirection(true);
-        param.setImageFile(FileUtils.getFile(bitmap));
-
+        param.setImageFile(file);
         // 调用通用文字识别服务
         OCR.getInstance(this).recognizeGeneralBasic(param, new OnResultListener<GeneralResult>() {
+
             @Override
             public void onResult(GeneralResult result) {
                 tv_ocr.setText(getUpLoadOcrText(result));

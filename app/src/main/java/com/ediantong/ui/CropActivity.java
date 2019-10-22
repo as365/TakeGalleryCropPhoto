@@ -1,6 +1,7 @@
 package com.ediantong.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     private CropBean mCropBean;
     private CropImageView cropImageView;
     private TextView tv_cancel, tv_ok;
+    private final int CODE_CROP_RESULT_REQUEST = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +86,10 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBitmapSaveSuccess(File file) {
+        Intent intent = new Intent();
+        intent.setData(Uri.fromFile(file));
+        setResult(CODE_CROP_RESULT_REQUEST,intent);
         finish();
-        ToastUtil.showCenterShort("success");
     }
 
     @Override
