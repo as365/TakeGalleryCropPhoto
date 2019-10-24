@@ -8,9 +8,9 @@ package com.ediantong.server;
  */
 public interface E {
     //sdk 签名信息
-    String API_KEY = "1NY7ROXmbGjgFCbIS2wXOt6w";
-    String SECRET_KEY = "vX3YY1PuYOvjqrW0XPcrqnwOnqv7XS4S";
-    String APP_ID = "17523727";
+    String API_KEY = "***";
+    String SECRET_KEY = "***";
+    String APP_ID = "***";
 
     //sp信息
     String OCR_TOKEN = "ocr_token";
