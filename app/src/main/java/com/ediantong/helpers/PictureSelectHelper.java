@@ -19,7 +19,6 @@ import com.ediantong.bean.CropBean;
 import com.ediantong.ui.CropActivity;
 import com.ediantong.ui.SelectPictureActivity;
 import com.ediantong.utils.FileUtils;
-import com.ediantong.utils.ToastUtil;
 
 import java.io.File;
 
@@ -60,7 +59,6 @@ public class PictureSelectHelper  {
                     }
                     cropImage(mContext, wrapperCropBean(newUri, 800, 800, true), CODE_CROP_RESULT_REQUEST);
                 } else {
-                    ToastUtil.showCenterShort("设备没有SD卡！");
                 }
                 break;
             case CODE_CROP_RESULT_REQUEST:
@@ -91,14 +89,12 @@ public class PictureSelectHelper  {
                 || ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(mContext, Manifest.permission.CAMERA)) {
-                ToastUtil.showCenterShort("您已经拒绝过一次!");
             }
             ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSIONS_REQUEST_CODE);
         } else {//有权限直接调用系统相机拍照
             if (hasSdcard()) {
                 takePicture(mContext, CODE_CAMERA_REQUEST);
             } else {
-                ToastUtil.showCenterShort("设备没有SD卡！");
             }
         }
     }
@@ -123,7 +119,6 @@ public class PictureSelectHelper  {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && hasSdcard()) {
                     takePicture(mContext, CODE_CAMERA_REQUEST);
                 } else {
-                    ToastUtil.showCenterShort("权限缺失,请允许打开相机等权限！！");
                 }
                 break;
             }
@@ -132,7 +127,6 @@ public class PictureSelectHelper  {
 
                     openPic(mContext, CODE_GALLERY_REQUEST);
                 } else {
-                    ToastUtil.showCenterShort("请允许打操作SDCard！！");
                 }
                 break;
         }

@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.ediantong.R;
 import com.ediantong.bean.CropBean;
-import com.ediantong.utils.ToastUtil;
 import com.ediantong.view.CropImageView;
 
 import java.io.File;
@@ -94,6 +93,5 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBitmapSaveError(File file) {
-        ToastUtil.showCenterShort("fail");
     }
 }
