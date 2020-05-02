@@ -27,7 +27,7 @@ public class PictureSelectHelper  {
 
     private final int CODE_GALLERY_REQUEST = 100;
     private final int CODE_CAMERA_REQUEST = 101;
-    private final int CODE_CROP_RESULT_REQUEST = 102;
+    public static final int CODE_CROP_RESULT_REQUEST = 102;
     private final int CAMERA_PERMISSIONS_REQUEST_CODE = 201;
     private final int STORAGE_PERMISSIONS_REQUEST_CODE = 202;
 

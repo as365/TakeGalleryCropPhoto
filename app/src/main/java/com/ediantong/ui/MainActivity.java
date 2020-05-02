@@ -1,10 +1,12 @@
 package com.ediantong.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,12 +17,14 @@ import com.ediantong.helpers.PictureSelectHelper;
 
 import java.io.File;
 
+import static com.ediantong.helpers.PictureSelectHelper.CODE_CROP_RESULT_REQUEST;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btmCamera;
     private Button btmPic;
-    private TextView tv_ocr;
+    private ImageView image_view;
     private PictureSelectHelper helper = new PictureSelectHelper(this);
 
     @Override
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         btmCamera = findViewById(R.id.btm_camera);
-        tv_ocr = findViewById(R.id.tv_ocr);
+        image_view = findViewById(R.id.image_view);
         btmPic = findViewById(R.id.btm_pic);
         btmCamera.setOnClickListener(this);
         btmPic.setOnClickListener(this);
@@ -54,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         helper.onActivityResult(requestCode, resultCode, data);
-        //只有成功获取到了bitmap才进行上传处理
-        if (helper.getResultFile() != null) {
-            upLoadBitmap(helper.getResultFile());
+        //只有成功裁剪了获取到了bitmap才进行上传处理
+        if (requestCode == CODE_CROP_RESULT_REQUEST && helper.getResultFile() != null) {
+            renderBitmap(helper.getResultFile());
         }
     }
 
@@ -67,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void upLoadBitmap(File file) {
-        tv_ocr.setText("");
-
+    private void renderBitmap(File file) {
+        Bitmap bm = BitmapFactory.decodeFile(file.getAbsolutePath());
+        image_view.setImageBitmap(bm);
     }
 
 }
