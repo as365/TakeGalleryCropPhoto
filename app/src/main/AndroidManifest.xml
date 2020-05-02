@@ -21,7 +21,6 @@
         <activity android:name=".ui.CropActivity">
         </activity>
         <activity android:name=".ui.SelectPictureActivity">
-
         </activity>
         <activity
             android:name=".ui.MainActivity"
